@@ -11,7 +11,7 @@ public interface PostRepository {
     void save(PostEntity post);
     void update(PostEntity post);
     void delete(long id);
-    List<TagEntity> findTagsByPost(PostEntity post);
+    List<TagEntity> findTagsByPost(long postId);
     void addTagToPost(PostEntity post, TagEntity tag);
     void removeTagFromPost(PostEntity post, TagEntity tag);
 }

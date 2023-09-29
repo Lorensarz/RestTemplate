@@ -6,12 +6,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class UserResultSetMapper implements SimpleResultSetMapper {
+    @Override
     public UserEntity map(ResultSet resultSet) throws SQLException {
-        UserEntity User = new UserEntity();
-        User.setId(resultSet.getLong("id"));
-        User.setName(resultSet.getString("username"));
-        User.setEmail(resultSet.getString("email"));
-        return User;
+        UserEntity user = new UserEntity();
+        user.setId(resultSet.getLong("id"));
+        user.setName(resultSet.getString("username"));
+        user.setEmail(resultSet.getString("email"));
+        return user;
     }
 }
 
