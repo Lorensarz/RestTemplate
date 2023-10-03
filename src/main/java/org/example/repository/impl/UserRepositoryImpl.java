@@ -1,10 +1,12 @@
 package org.example.repository.impl;
 
+import org.example.db.ConnectionManager;
+import org.example.db.MySQLConnection;
 import org.example.model.UserEntity;
 import org.example.repository.UserRepository;
 import org.example.repository.mapper.UserResultSetMapper;
+import org.example.repository.mapper.UserResultSetMapperImpl;
 
-import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -15,20 +17,21 @@ import java.util.List;
 public class UserRepositoryImpl implements UserRepository {
     private final UserResultSetMapper resultSetMapper;
 
-    private final DataSource dataSource;
+    private final ConnectionManager dataSource;
 
-    public UserRepositoryImpl(UserResultSetMapper resultSetMapper, DataSource dataSource) {
+    public UserRepositoryImpl(UserResultSetMapper resultSetMapper, ConnectionManager dataSource) {
         this.resultSetMapper = resultSetMapper;
         this.dataSource = dataSource;
     }
 
     @Override
-    public UserEntity findById(java.util.UUID uuid) {
-        String query = "SELECT * FROM users WHERE uuid = ?";
-        try (Connection connection = dataSource.getConnection()) {
-            PreparedStatement preparedStatement =
-                    connection.prepareStatement(query);
-            preparedStatement.setObject(1, uuid);
+    public UserEntity findById(long id) {
+        String query = "SELECT * FROM users WHERE id = ?";
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement preparedStatement =
+                     connection.prepareStatement(query)) {
+
+            preparedStatement.setObject(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 return resultSetMapper.map(resultSet);
@@ -36,19 +39,17 @@ public class UserRepositoryImpl implements UserRepository {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        throw new IllegalStateException("Could not find user for UUID");
+        throw new IllegalStateException("Could not find user for id " + id);
     }
 
     @Override
-    public boolean deleteById(java.util.UUID uuid) {
-        String query = "DELETE FROM users WHERE uuid = ?";
-        try (Connection connection = dataSource.getConnection()) {
-            int affectedRows;
-            try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-                preparedStatement.setObject(1, uuid);
-                affectedRows = preparedStatement.executeUpdate();
-            }
-            return affectedRows > 0;
+    public boolean deleteById(long id) {
+        String query = "DELETE FROM users WHERE id = ?";
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setObject(1, id);
+            preparedStatement.executeUpdate();
+            return true;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -56,26 +57,25 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public List<UserEntity> findAll() {
-        List<UserEntity> aUsers = new ArrayList<>();
-        try (Connection connection = dataSource.getConnection()) {
-            PreparedStatement preparedStatement =
-                    connection.prepareStatement("SELECT * FROM users");
+        String query = "SELECT * FROM users";
+        List<UserEntity> users = new ArrayList<>();
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                aUsers.add(resultSetMapper.map(resultSet));
+                users.add(resultSetMapper.map(resultSet));
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new IllegalStateException("Could not find all users: " + e.getMessage(), e);
         }
-        return aUsers;
+        return users;
     }
 
     @Override
     public void save(UserEntity user) {
         String query = "INSERT INTO users (name, email) VALUES (?, ?)";
-        try (Connection connection = dataSource.getConnection()) {
-            PreparedStatement preparedStatement =
-                    connection.prepareStatement(query);
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, user.getName());
             preparedStatement.setString(2, user.getEmail());
             preparedStatement.executeUpdate();
@@ -86,9 +86,9 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public void update(UserEntity user) {
-        try (Connection connection = dataSource.getConnection()) {
-            PreparedStatement preparedStatement =
-                    connection.prepareStatement("UPDATE users SET userName = ?, email = ? WHERE uuid = ?");
+        String query = "UPDATE users SET name = ?, email = ? WHERE id = ?";
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, user.getName());
             preparedStatement.setString(2, user.getEmail());
             preparedStatement.setObject(3, user.getId());

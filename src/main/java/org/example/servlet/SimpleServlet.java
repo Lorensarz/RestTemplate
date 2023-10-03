@@ -1,16 +1,17 @@
 package org.example.servlet;
 
-import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+
 import org.example.model.SimpleEntity;
 import org.example.service.SimpleService;
 import org.example.servlet.dto.IncomingDto;
 import org.example.servlet.dto.OutGoingDto;
 import org.example.servlet.mapper.SimpleDtomapper;
 
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.UUID;
 
