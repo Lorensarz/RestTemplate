@@ -10,6 +10,9 @@ public interface PostRepository {
     List<PostEntity> findAll();
     void save(PostEntity post);
     void update(PostEntity post);
+
+    List<TagEntity> findTagsByPostId(long postId);
+
     void delete(long id);
 
 }

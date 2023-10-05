@@ -8,12 +8,15 @@ import org.example.servlet.dto.UserDto;
 import org.example.servlet.mapper.UserDtoMapper;
 import org.example.servlet.mapper.UserDtoMapperImpl;
 
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 
+@WebServlet("/users")
 public class UserServlet extends HttpServlet {
 
     private transient UserService userService = new UserServiceImpl();
@@ -23,35 +26,31 @@ public class UserServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-//        String id = req.getParameter("id");
-//        try {
-//            if (id != null) {
-//                UserEntity userId = userService.findById(Long.parseLong(id));
-//                UserDto userDto = userMapper.toDto(userId);
-//                writeResponse(resp, gson.toJson(userDto));
-//                resp.setStatus(200);
-//            } else {
-//                findAllUsers(resp);
-//            }
-//        } catch (IOException e) {
-//            writeResponse(resp, e.getMessage());
-//            resp.setStatus(404, "User not found");
-//        }
-
-        try (PrintWriter writer = resp.getWriter()) {
-            writer.write("Hello world");
-        } catch (Exception e) {
-            e.printStackTrace();
+        String id = req.getParameter("id");
+        try {
+            if (id != null) {
+                UserEntity userId = userService.findById(Long.parseLong(id));
+                UserDto userDto = userMapper.toDto(userId);
+                writeResponse(resp, gson.toJson(userDto));
+                resp.setStatus(200);
+            } else {
+                findAllUsers(resp);
+            }
+        } catch (IOException e) {
+            writeResponse(resp, e.getMessage());
+            resp.setStatus(404, "User not found");
         }
+
+//        resp.getWriter().println("Hello");
 
     }
 
-//    private void findAllUsers(HttpServletResponse resp) throws IOException {
-//        List<UserEntity> users = userService.findAll();
-//        List<UserDto> userDtos = userMapper.toDtoList(users);
-//        writeResponse(resp, gson.toJson(userDtos));
-//
-//    }
+    private void findAllUsers(HttpServletResponse resp) throws IOException {
+        List<UserEntity> users = userService.findAll();
+        List<UserDto> userDtos = userMapper.toDtoList(users);
+        writeResponse(resp, gson.toJson(userDtos));
+
+    }
 
 
     @Override
