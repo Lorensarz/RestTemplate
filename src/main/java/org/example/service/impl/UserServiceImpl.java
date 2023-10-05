@@ -2,17 +2,14 @@ package org.example.service.impl;
 
 import org.example.model.UserEntity;
 import org.example.repository.UserRepository;
+import org.example.repository.impl.UserRepositoryImpl;
 import org.example.service.UserService;
 
 import java.util.List;
 
 public class UserServiceImpl implements UserService {
 
-    private final UserRepository repository;
-
-    public UserServiceImpl(UserRepository repository) {
-        this.repository = repository;
-    }
+    private final UserRepository repository = new UserRepositoryImpl();
 
     @Override
     public UserEntity findById(long id) {

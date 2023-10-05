@@ -15,13 +15,8 @@ import java.sql.SQLException;
 import java.util.List;
 
 public class TagRepositoryImpl implements TagRepository{
-    private final ConnectionManager dataSource;
-    private final TagResultSetMapper resultSetMapper;
-
-    public TagRepositoryImpl(ConnectionManager dataSource, TagResultSetMapper resultSetMapper) {
-        this.dataSource = dataSource;
-        this.resultSetMapper = resultSetMapper;
-    }
+    private final ConnectionManager dataSource = new MySQLConnection();
+    private final TagResultSetMapper resultSetMapper = new TagResultSetMapperImpl();
 
     @Override
     public List<TagEntity> findTagsByPost(long postId) {

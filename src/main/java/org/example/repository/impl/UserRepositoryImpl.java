@@ -15,14 +15,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserRepositoryImpl implements UserRepository {
-    private final UserResultSetMapper resultSetMapper;
+    private final UserResultSetMapper resultSetMapper = new UserResultSetMapperImpl();
 
-    private final ConnectionManager dataSource;
+    private final ConnectionManager dataSource = new MySQLConnection();
 
-    public UserRepositoryImpl(UserResultSetMapper resultSetMapper, ConnectionManager dataSource) {
-        this.resultSetMapper = resultSetMapper;
-        this.dataSource = dataSource;
-    }
 
     @Override
     public UserEntity findById(long id) {

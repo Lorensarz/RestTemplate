@@ -3,42 +3,32 @@ package org.example.db;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.Properties;
 
 public class MySQLConnection implements ConnectionManager {
+    private static final HikariConfig config = new HikariConfig();
     private static HikariDataSource dataSource;
 
-    public MySQLConnection(HikariDataSource dataSource) {
-        this.dataSource = dataSource;
+    static {
+        config.setJdbcUrl("jdbc:mysql://localhost:3306/rest_template");
+        config.setUsername("root");
+        config.setPassword("root");
+        config.addDataSourceProperty("cachePrepStmts", "true");
+        config.addDataSourceProperty("prepStmtCacheSize", "250");
+        config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
+        dataSource = new HikariDataSource(config);
     }
 
+    public MySQLConnection() {
+    }
 
-    static {
-        HikariConfig config = new HikariConfig();
+    public static void setDataSource(HikariDataSource dataSource) {
+        MySQLConnection.dataSource = dataSource;
+    }
 
-        try (InputStream is = MySQLConnection.class.getClassLoader().getResourceAsStream("db.properties")) {
-            if (is == null) {
-                throw new RuntimeException("Не удалось найти файл db.properties");
-            }
-
-            Properties properties = new Properties();
-            properties.load(is);
-
-            config.setJdbcUrl(properties.getProperty("db.url"));
-            config.setUsername(properties.getProperty("db.username"));
-            config.setPassword(properties.getProperty("db.password"));
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Ошибка при загрузке настроек из db.properties", e);
-        }
-
-        config.setMaximumPoolSize(10);
-
-        dataSource = new HikariDataSource(config);
+    public static HikariDataSource getDataSource() {
+        return dataSource;
     }
 
     @Override

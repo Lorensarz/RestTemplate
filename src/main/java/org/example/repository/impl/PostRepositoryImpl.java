@@ -6,6 +6,8 @@ import org.example.model.PostEntity;
 import org.example.repository.PostRepository;
 import org.example.repository.mapper.PostResultSetMapper;
 import org.example.repository.mapper.PostResultSetMapperImpl;
+import org.example.repository.mapper.UserResultSetMapper;
+import org.example.repository.mapper.UserResultSetMapperImpl;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -15,13 +17,9 @@ import java.util.List;
 
 public class PostRepositoryImpl implements PostRepository {
 
-    private final ConnectionManager dataSource;
-    private final PostResultSetMapper resultSetMapper;
+    private final PostResultSetMapper resultSetMapper = new PostResultSetMapperImpl();
+    private final ConnectionManager dataSource = new MySQLConnection();
 
-    public PostRepositoryImpl(ConnectionManager dataSource, PostResultSetMapper resultSetMapper) {
-        this.dataSource = dataSource;
-        this.resultSetMapper = resultSetMapper;
-    }
 
     @Override
     public PostEntity findById(long id) {
