@@ -27,16 +27,8 @@ public class MySQLConnection implements ConnectionManager {
         MySQLConnection.dataSource = dataSource;
     }
 
-    public static HikariDataSource getDataSource() {
-        return dataSource;
-    }
-
     @Override
     public Connection getConnection() throws SQLException {
         return dataSource.getConnection();
-    }
-
-    public void close() {
-        dataSource.close();
     }
 }

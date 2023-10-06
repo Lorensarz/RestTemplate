@@ -32,11 +32,11 @@ public class UserDtoMapperImpl implements UserDtoMapper {
 
     @Override
     public List<UserDto> toDtoList(Collection<UserEntity> users) {
-        List<UserDto> dtos = new ArrayList<>(users.size());
-        for (UserEntity user: users) {
-            dtos.add(toDto(user));
+        List<UserDto> usersDto = new ArrayList<>();
+        for (UserEntity user : users) {
+            usersDto.add(toDto(user));
         }
-        return dtos;
+        return usersDto;
     }
 
 }

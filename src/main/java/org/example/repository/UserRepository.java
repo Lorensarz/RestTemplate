@@ -5,9 +5,9 @@ import org.example.model.UserEntity;
 import java.util.List;
 
 public interface UserRepository {
-    UserEntity findById(long id);
+    UserEntity findById(UserEntity userEntity);
 
-    boolean deleteById(long id);
+    boolean deleteById(UserEntity userEntity);
 
     List<UserEntity> findAll();
 

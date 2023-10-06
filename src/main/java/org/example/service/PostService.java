@@ -1,15 +1,16 @@
 package org.example.service;
 
 import org.example.model.PostEntity;
-import org.example.model.TagEntity;
+import org.example.servlet.dto.PostDto;
+import org.example.servlet.dto.TagDto;
 
 import java.util.List;
 
 public interface PostService {
-    PostEntity findById(long id);
+    PostEntity findById(PostDto postDto);
     List<PostEntity> findAll();
-    void save(PostEntity post);
-    void update(PostEntity post);
-    void deleteById(long id);
-    List<TagEntity> findTagsByPostId(long postId);
+    void save(PostDto postDto);
+    void update(PostDto postDto);
+    void deleteById(PostDto postDto);
+    List<TagDto> findTagsByPostId(PostDto postDto);
 }

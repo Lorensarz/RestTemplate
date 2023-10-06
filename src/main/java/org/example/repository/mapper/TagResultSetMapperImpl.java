@@ -1,5 +1,6 @@
 package org.example.repository.mapper;
 
+import org.example.model.PostEntity;
 import org.example.model.TagEntity;
 
 import java.sql.ResultSet;
@@ -7,7 +8,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TagResultSetMapperImpl implements TagResultSetMapper, SimpleResultSetMapper {
+public class TagResultSetMapperImpl implements TagResultSetMapper {
+    PostResultSetMapper postResultSetMapper = new PostResultSetMapperImpl();
+
     @Override
     public TagEntity map(ResultSet resultSet) throws SQLException {
         TagEntity tag = new TagEntity();
@@ -16,13 +19,13 @@ public class TagResultSetMapperImpl implements TagResultSetMapper, SimpleResultS
     }
 
     @Override
-    public List<TagEntity> toListTags(ResultSet resultSet) {
-        List<TagEntity> tags = new ArrayList<>();
+    public List<PostEntity> toListPosts(ResultSet resultSet) {
+        List<PostEntity> posts = new ArrayList<>();
         try {
             while (resultSet.next()) {
-                tags.add(map(resultSet));
+                posts.add(postResultSetMapper.map(resultSet));
             }
-            return tags;
+            return posts;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

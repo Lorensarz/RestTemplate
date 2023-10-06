@@ -21,13 +21,13 @@ public class UserRepositoryImpl implements UserRepository {
 
 
     @Override
-    public UserEntity findById(long id) {
+    public UserEntity findById(UserEntity userEntity) {
         String query = "SELECT * FROM users WHERE id = ?";
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement =
                      connection.prepareStatement(query)) {
 
-            preparedStatement.setObject(1, id);
+            preparedStatement.setObject(1, userEntity.getId());
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 return resultSetMapper.map(resultSet);
@@ -35,15 +35,15 @@ public class UserRepositoryImpl implements UserRepository {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        throw new IllegalStateException("Could not find user for id " + id);
+        throw new IllegalStateException("Could not find user for id " + userEntity.getId());
     }
 
     @Override
-    public boolean deleteById(long id) {
+    public boolean deleteById(UserEntity userEntity) {
         String query = "DELETE FROM users WHERE id = ?";
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setObject(1, id);
+            preparedStatement.setObject(1, userEntity.getId());
             preparedStatement.executeUpdate();
             return true;
         } catch (SQLException e) {

@@ -13,4 +13,5 @@ public interface PostResultSetMapper {
     List<PostEntity> toListPosts(ResultSet resultSet);
 
     List<TagEntity> toListTags(ResultSet resultSet);
+
 }

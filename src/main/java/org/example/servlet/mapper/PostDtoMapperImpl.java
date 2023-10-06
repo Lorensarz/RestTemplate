@@ -8,7 +8,7 @@ import java.util.List;
 
 public class PostDtoMapperImpl implements PostDtoMapper {
 
-    private TagDtoMapperImpl tagMapper = new TagDtoMapperImpl();
+    private final TagDtoMapperImpl tagMapper = new TagDtoMapperImpl();
 
     @Override
     public PostDto toDto(PostEntity post) {

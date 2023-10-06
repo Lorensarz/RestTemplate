@@ -19,15 +19,12 @@ public class PostRepositoryImpl implements PostRepository {
     private final PostResultSetMapper resultSetMapper = new PostResultSetMapperImpl();
     private final ConnectionManager dataSource = new MySQLConnection();
 
-    private final TagEntity tagEntity = new TagEntity();
-
-
     @Override
-    public PostEntity findById(long id) {
+    public PostEntity findById(PostEntity postEntity) {
         String query = "SELECT id, content, title FROM posts WHERE id = ?";
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setObject(1, id);
+            preparedStatement.setObject(1, postEntity.getId());
             ResultSet resultSet = preparedStatement.executeQuery();
             return resultSetMapper.map(resultSet);
         } catch (SQLException e) {
@@ -75,14 +72,15 @@ public class PostRepositoryImpl implements PostRepository {
         }
 
     }
+
     @Override
-    public List<TagEntity> findTagsByPostId(long postId) {
+    public List<TagEntity> findTagsByPostId(PostEntity postEntity) {
         String query = "SELECT t.id, t.name FROM tags t " +
                 "INNER JOIN post_tag pt ON t.id = pt.tag_id " +
                 "WHERE pt.post_id = ?";
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setLong(1, postId);
+            preparedStatement.setLong(1, postEntity.getId());
             ResultSet resultSet = preparedStatement.executeQuery();
             return resultSetMapper.toListTags(resultSet);
         } catch (SQLException e) {
@@ -92,11 +90,11 @@ public class PostRepositoryImpl implements PostRepository {
 
 
     @Override
-    public void delete(long id) {
+    public void delete(PostEntity postEntity) {
         String query = "DELETE FROM posts WHERE id = ?";
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setObject(1, id);
+            preparedStatement.setObject(1, postEntity.getId());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);

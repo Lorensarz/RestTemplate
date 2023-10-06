@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PostResultSetMapperImpl implements PostResultSetMapper, SimpleResultSetMapper {
+public class PostResultSetMapperImpl implements PostResultSetMapper {
 
     private final TagResultSetMapperImpl tagResultSetMapper = new TagResultSetMapperImpl();
     @Override
