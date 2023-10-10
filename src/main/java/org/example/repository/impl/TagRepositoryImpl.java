@@ -18,14 +18,18 @@ public class TagRepositoryImpl implements TagRepository{
     private final ConnectionManager dataSource = new MySQLConnection();
     private final TagResultSetMapper resultSetMapper = new TagResultSetMapperImpl();
 
+
+
     @Override
-    public List<PostEntity> findPostsByTag(TagEntity tagEntity) {
-        String query = "SELECT post_id FROM Post_Tag WHERE tag_id = ?";
+    public List<TagEntity> findTagsByPostId(PostEntity postEntity) {
+        String query = "SELECT t.id, t.name FROM tags t " +
+                "INNER JOIN post_tag pt ON t.id = pt.tag_id " +
+                "WHERE pt.post_id = ?";
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setObject(1, tagEntity.getId());
-             ResultSet resultSet = preparedStatement.executeQuery();
-            return resultSetMapper.toListPosts(resultSet);
+            preparedStatement.setLong(1, postEntity.getId());
+            ResultSet resultSet = preparedStatement.executeQuery();
+            return resultSetMapper.toListTags(resultSet);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

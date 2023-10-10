@@ -1,9 +1,13 @@
 package org.example.servlet;
 
 import com.google.gson.Gson;
+import org.example.repository.UserRepository;
+import org.example.repository.impl.UserRepositoryImpl;
 import org.example.service.UserService;
 import org.example.service.impl.UserServiceImpl;
 import org.example.servlet.dto.UserDto;
+import org.example.servlet.mapper.UserDtoMapper;
+import org.example.servlet.mapper.UserDtoMapperImpl;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -15,21 +19,23 @@ import java.io.PrintWriter;
 @WebServlet("/users")
 public class UserServlet extends HttpServlet {
 
-    private final UserService userService = new UserServiceImpl();
-    private final Gson gson = new Gson();
+    private final UserDtoMapper userDtoMapper;
+    private final UserRepository userRepository;
 
+    UserService userService = new  UserServiceImpl(
+            userDtoMapper = new UserDtoMapperImpl(),
+            userRepository = new UserRepositoryImpl());
+    private final Gson gson = new Gson();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String id = req.getParameter("id");
         if (id != null) {
-            UserDto userDto = gson.fromJson(req.getReader(), UserDto.class);
-            userService.findById(userDto);
+            UserDto userDto = userDtoMapper.toDto(userService.findById(Long.parseLong(id)));
             writeResponse(resp, gson.toJson(userDto));
         } else {
             findAllUsers(resp);
         }
-//        resp.getWriter().println("Hello");
     }
 
     private void findAllUsers(HttpServletResponse resp) throws IOException {
@@ -41,22 +47,18 @@ public class UserServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         UserDto userDto = gson.fromJson(req.getReader(), UserDto.class);
         userService.save(userDto);
-        resp.setStatus(200);
-
     }
 
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         UserDto userDto = gson.fromJson(req.getReader(), UserDto.class);
         userService.update(userDto);
-        resp.setStatus(200);
     }
 
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        UserDto userDto = gson.fromJson(req.getReader(), UserDto.class);
-        userService.deleteById(userDto);
-        resp.setStatus(200);
+        String id = req.getParameter("id");
+        userService.deleteById(Long.parseLong(id));
     }
 
     private void writeResponse(HttpServletResponse resp, String jsonString) throws IOException {

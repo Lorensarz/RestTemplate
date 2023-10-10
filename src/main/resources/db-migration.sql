@@ -8,7 +8,7 @@ CREATE TABLE posts (
                        title VARCHAR(255) NOT NULL,
                        content TEXT NOT NULL,
                        user_id INT,
-                       FOREIGN KEY (user_id) REFERENCES users(id)
+                       FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
 CREATE TABLE tags (

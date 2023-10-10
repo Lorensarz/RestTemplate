@@ -6,13 +6,12 @@ import org.example.model.TagEntity;
 import java.util.List;
 
 public interface PostRepository {
-    PostEntity findById(PostEntity postEntity);
+    PostEntity findById(long id);
     List<PostEntity> findAll();
     void save(PostEntity post);
     void update(PostEntity post);
+    List<PostEntity> findPostsByTag(TagEntity tagEntity);
 
-    List<TagEntity> findTagsByPostId(PostEntity postEntity);
-
-    void delete(PostEntity postEntity);
+    void delete(long id);
 
 }

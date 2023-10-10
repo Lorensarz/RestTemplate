@@ -8,7 +8,6 @@ import java.util.Collection;
 import java.util.List;
 
 public class UserDtoMapperImpl implements UserDtoMapper {
-    private final PostDtoMapperImpl postMapper = new PostDtoMapperImpl();
 
     @Override
     public UserDto toDto(UserEntity user) {
@@ -16,7 +15,6 @@ public class UserDtoMapperImpl implements UserDtoMapper {
         dto.setId(user.getId());
         dto.setName(user.getName());
         dto.setEmail(user.getEmail());
-        dto.setPosts(postMapper.toDtoList(user.getPosts()));
         return dto;
     }
 
@@ -26,7 +24,6 @@ public class UserDtoMapperImpl implements UserDtoMapper {
         user.setId(dto.getId());
         user.setName(dto.getName());
         user.setEmail(dto.getEmail());
-        user.setPosts(postMapper.toEntityList(dto.getPosts()));
         return user;
     }
 

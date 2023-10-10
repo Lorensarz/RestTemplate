@@ -1,10 +1,13 @@
 package org.example.servlet;
 
 import com.google.gson.Gson;
+import org.example.repository.impl.TagRepositoryImpl;
 import org.example.service.TagService;
 import org.example.service.impl.TagServiceImpl;
 import org.example.servlet.dto.PostDto;
 import org.example.servlet.dto.TagDto;
+import org.example.servlet.mapper.PostDtoMapperImpl;
+import org.example.servlet.mapper.TagDtoMapperImpl;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -16,13 +19,17 @@ import java.util.List;
 
 @WebServlet("/tags")
 public class TagServlet extends HttpServlet {
-    private final TagService tagService = new TagServiceImpl();
+    private final TagService tagService = new TagServiceImpl(
+            new TagRepositoryImpl(),
+            new TagDtoMapperImpl(),
+            new PostDtoMapperImpl());
+
     private final Gson gson = new Gson();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        TagDto tagDto = gson.fromJson(req.getReader(), TagDto.class);
-        List<PostDto> posts = tagService.findPostsByTag(tagDto);
+        PostDto postDto = gson.fromJson(req.getReader(), PostDto.class);
+        List<TagDto> posts = tagService.findTagsByPost(postDto);
         writeResponse(resp, gson.toJson(posts));
     }
 

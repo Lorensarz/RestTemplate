@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TagResultSetMapperImpl implements TagResultSetMapper {
-    PostResultSetMapper postResultSetMapper = new PostResultSetMapperImpl();
 
     @Override
     public TagEntity map(ResultSet resultSet) throws SQLException {
@@ -18,14 +17,13 @@ public class TagResultSetMapperImpl implements TagResultSetMapper {
         return tag;
     }
 
-    @Override
-    public List<PostEntity> toListPosts(ResultSet resultSet) {
-        List<PostEntity> posts = new ArrayList<>();
+    public List<TagEntity> toListTags(ResultSet resultSet) {
+        List<TagEntity> tags = new ArrayList<>();
         try {
             while (resultSet.next()) {
-                posts.add(postResultSetMapper.map(resultSet));
+                tags.add(map(resultSet));
             }
-            return posts;
+            return tags;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

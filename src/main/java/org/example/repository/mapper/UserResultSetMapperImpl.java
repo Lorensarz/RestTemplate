@@ -5,7 +5,7 @@ import org.example.model.UserEntity;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class UserResultSetMapperImpl implements UserResultSetMapper, SimpleResultSetMapper {
+public class UserResultSetMapperImpl implements UserResultSetMapper {
     @Override
     public UserEntity map(ResultSet resultSet) throws SQLException {
         UserEntity user = new UserEntity();

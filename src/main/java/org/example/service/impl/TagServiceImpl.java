@@ -16,9 +16,15 @@ import java.util.List;
 
 public class TagServiceImpl implements TagService {
 
-    private final TagRepository repository = new TagRepositoryImpl();
-    private final TagDtoMapper tagDtoMapper = new TagDtoMapperImpl();
-    private final PostDtoMapper postDtoMapper = new PostDtoMapperImpl();
+    private final TagRepository repository;
+    private final TagDtoMapper tagDtoMapper;
+    private final PostDtoMapper postDtoMapper;
+
+    public TagServiceImpl(TagRepository repository, TagDtoMapper tagDtoMapper, PostDtoMapper postDtoMapper) {
+        this.repository = repository;
+        this.tagDtoMapper = tagDtoMapper;
+        this.postDtoMapper = postDtoMapper;
+    }
 
     @Override
     public void addTagToPost(PostDto post, TagDto tag) {
@@ -35,9 +41,10 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public List<PostDto> findPostsByTag(TagDto tagDto) {
-        TagEntity tagEntity = tagDtoMapper.toEntity(tagDto);
-        List<PostEntity> postsDto = repository.findPostsByTag(tagEntity);
-        return postDtoMapper.toDtoList(postsDto);
+    public List<TagDto> findTagsByPost(PostDto postDto) {
+        List<TagEntity> tags = repository.findTagsByPostId(postDtoMapper.toEntity(postDto));
+        return tagDtoMapper.toDtoList(tags);
     }
+
+
 }

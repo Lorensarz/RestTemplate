@@ -7,8 +7,8 @@ import java.util.List;
 
 public interface UserService {
 
-    UserEntity findById(UserDto userDto);
-    boolean deleteById(UserDto userDto);
+    UserEntity findById(long id);
+    boolean deleteById(long id);
 
     List<UserDto> findAll();
 
