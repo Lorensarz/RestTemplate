@@ -7,14 +7,13 @@ import org.example.servlet.dto.PostDto;
 import org.example.servlet.dto.TagDto;
 import org.example.servlet.mapper.PostDtoMapper;
 import org.example.servlet.mapper.PostDtoMapperImpl;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.*;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -22,6 +21,9 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.*;
 
 
 public class PostServletTest {
@@ -47,12 +49,24 @@ public class PostServletTest {
 
     @Test
     public void testDoGet() throws IOException {
-        PostDto postDto = new PostDto(1L, "Test Post", "This is a test post",
-                1L, Collections.singletonList(new TagDto(1L, "Test Tag")));
-        PostEntity postEntity = postDtoMapper.toEntity(postDto);
+        PostDto postDto = new PostDto();
+        postDto.setId(1L);
+        postDto.setTitle("Post 1");
+        postDto.setContent("Content for post 1");
+        postDto.setUserId(1L);
+
+        PostDto postDto2 = new PostDto();
+        postDto2.setId(2L);
+        postDto2.setTitle("Post 2");
+        postDto2.setContent("Content for post 2");
+        postDto2.setUserId(2L);
+
+        List<PostDto> expectedPosts = new ArrayList<>();
+        expectedPosts.add(postDto);
+        expectedPosts.add(postDto2);
 
         when(request.getParameter("id")).thenReturn("1");
-        when(postService.findById(anyLong())).thenReturn(postEntity);
+        when(postService.findPostsByUserId(anyLong())).thenReturn(postDtoMapper.toEntityList(expectedPosts));
 
         StringWriter stringWriter = new StringWriter();
         PrintWriter writer = new PrintWriter(stringWriter);
@@ -89,7 +103,7 @@ public class PostServletTest {
 
         String expectedJson = gson.toJson(posts);
         writer.flush();
-        assertEquals(expectedJson, stringWriter.toString());
+        Assertions.assertEquals(expectedJson, stringWriter.toString());
     }
 
     @Test

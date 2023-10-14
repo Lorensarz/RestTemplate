@@ -27,8 +27,8 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public PostEntity findById(long id) {
-        return repository.findById(id);
+    public List<PostEntity> findPostsByUserId(long id) {
+        return repository.findPostsByUserId(id);
     }
 
     @Override

@@ -17,7 +17,6 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -39,17 +38,32 @@ public class PostServiceImplTest {
     }
 
     @Test
-    public void testFindById() {
-        long postId = 1L;
-        PostEntity expectedPost = new PostEntity();
-        expectedPost.setId(postId);
-        when(repository.findById(postId)).thenReturn(expectedPost);
+    public void testFindPostsByUsersId() {
+        long userId = 1L;
 
-        PostEntity result = postService.findById(postId);
-        verify(repository).findById(postId);
+        PostEntity postEntity = new PostEntity();
+        postEntity.setId(1L);
+        postEntity.setTitle("Post 1");
+        postEntity.setContent("Content for post 1");
+        postEntity.setUserId(1L);
+
+        PostEntity postEntity2 = new PostEntity();
+        postEntity2.setId(2L);
+        postEntity2.setTitle("Post 2");
+        postEntity2.setContent("Content for post 2");
+        postEntity2.setUserId(2L);
+
+        List<PostEntity> expectedPosts = new ArrayList<>();
+        expectedPosts.add(postEntity);
+        expectedPosts.add(postEntity2);
+
+        when(repository.findPostsByUserId(userId)).thenReturn(expectedPosts);
+
+        List<PostEntity> result = postService.findPostsByUserId(userId);
+        verify(repository).findPostsByUserId(userId);
 
         assertNotNull(result);
-        assertEquals(postId, result.getId());
+        assertEquals(expectedPosts, result);
     }
 
     @Test

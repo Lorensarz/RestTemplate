@@ -1,6 +1,8 @@
 package org.example.servlet;
 
 import com.google.gson.Gson;
+import org.example.db.ConnectionManager;
+import org.example.db.MySQLConnection;
 import org.example.repository.UserRepository;
 import org.example.repository.impl.UserRepositoryImpl;
 import org.example.service.UserService;
@@ -21,10 +23,11 @@ public class UserServlet extends HttpServlet {
 
     private final UserDtoMapper userDtoMapper;
     private final UserRepository userRepository;
+    ConnectionManager connectionManager = new MySQLConnection();
 
     UserService userService = new  UserServiceImpl(
             userDtoMapper = new UserDtoMapperImpl(),
-            userRepository = new UserRepositoryImpl());
+            userRepository = new UserRepositoryImpl(connectionManager));
     private final Gson gson = new Gson();
 
     @Override

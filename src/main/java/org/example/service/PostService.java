@@ -7,7 +7,10 @@ import org.example.servlet.dto.TagDto;
 import java.util.List;
 
 public interface PostService {
-    PostEntity findById(long id);
+//    PostEntity findById(long id);
+
+    List<PostEntity> findPostsByUserId(long id);
+
     List<PostEntity> findAll();
     void save(PostDto postDto);
     void update(PostDto postDto);

@@ -1,6 +1,8 @@
 package org.example.servlet;
 
 import com.google.gson.Gson;
+import org.example.db.ConnectionManager;
+import org.example.db.MySQLConnection;
 import org.example.repository.impl.TagRepositoryImpl;
 import org.example.service.TagService;
 import org.example.service.impl.TagServiceImpl;
@@ -19,8 +21,9 @@ import java.util.List;
 
 @WebServlet("/tags")
 public class TagServlet extends HttpServlet {
+    private final ConnectionManager connectionManager = new MySQLConnection();
     private final TagService tagService = new TagServiceImpl(
-            new TagRepositoryImpl(),
+            new TagRepositoryImpl(connectionManager),
             new TagDtoMapperImpl(),
             new PostDtoMapperImpl());
 

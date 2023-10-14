@@ -7,7 +7,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 public class MySQLConnection implements ConnectionManager {
-    private static final HikariConfig config = new HikariConfig();
+    private static HikariConfig config = new HikariConfig();
     private static HikariDataSource dataSource;
 
     static {
@@ -31,9 +31,6 @@ public class MySQLConnection implements ConnectionManager {
         config.addDataSourceProperty("elideSetAutoCommits", "true");
         config.addDataSourceProperty("maintainTimeStats", "false");
         dataSource = new HikariDataSource(config);
-    }
-
-    public MySQLConnection() {
     }
 
     public static void setDataSource(HikariDataSource dataSource) {

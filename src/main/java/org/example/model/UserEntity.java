@@ -1,6 +1,7 @@
 package org.example.model;
 
 import java.util.List;
+import java.util.Objects;
 
 public class UserEntity {
     private long id;
@@ -48,5 +49,31 @@ public class UserEntity {
 
     public void setPosts(List<PostEntity> posts) {
         this.posts = posts;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UserEntity that = (UserEntity) o;
+        return id == that.id && Objects.equals(name, that.name) &&
+                Objects.equals(email, that.email) &&
+                Objects.equals(posts, that.posts);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, email, posts);
+    }
+
+    @Override
+    public String toString() {
+        return "UserEntity{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", posts=" + posts +
+                '}';
     }
 }

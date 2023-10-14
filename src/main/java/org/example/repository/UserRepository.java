@@ -11,6 +11,7 @@ public interface UserRepository {
 
     List<UserEntity> findAll();
 
-    void save(UserEntity user);
+    boolean save(UserEntity user);
+
     void update(UserEntity user);
 }

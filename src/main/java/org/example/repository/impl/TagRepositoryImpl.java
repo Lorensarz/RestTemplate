@@ -15,9 +15,12 @@ import java.sql.SQLException;
 import java.util.List;
 
 public class TagRepositoryImpl implements TagRepository{
-    private final ConnectionManager dataSource = new MySQLConnection();
+    private final ConnectionManager dataSource;
     private final TagResultSetMapper resultSetMapper = new TagResultSetMapperImpl();
 
+    public TagRepositoryImpl(ConnectionManager connectionManager) {
+        dataSource = new MySQLConnection();
+    }
 
 
     @Override

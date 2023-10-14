@@ -1,6 +1,8 @@
 package org.example.servlet;
 
 import com.google.gson.Gson;
+import org.example.db.ConnectionManager;
+import org.example.db.MySQLConnection;
 import org.example.repository.PostRepository;
 import org.example.repository.impl.PostRepositoryImpl;
 import org.example.service.PostService;
@@ -17,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 
 @WebServlet("/posts")
 public class PostServlet extends HttpServlet {
@@ -24,19 +27,20 @@ public class PostServlet extends HttpServlet {
     private final PostRepository postRepository;
     private final PostDtoMapper postDtoMapper;
     private final TagDtoMapper tagDtoMapper;
+    private ConnectionManager connectionManager = new MySQLConnection();
 
     private final PostService postService = new PostServiceImpl(
-            postRepository = new PostRepositoryImpl(),
+            postRepository = new PostRepositoryImpl(connectionManager),
             postDtoMapper = new PostDtoMapperImpl(),
             tagDtoMapper = new TagDtoMapperImpl());
     private final Gson gson = new Gson();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        String id = req.getParameter("id");
-        if (id != null) {
-            PostDto postDto = postDtoMapper.toDto(postService.findById(Long.parseLong(id)));
-            writeResponse(resp, gson.toJson(postDto));
+        String userId = req.getParameter("user_id");
+        if (userId != null) {
+            List<PostDto> postsDto = postDtoMapper.toDtoList(postService.findPostsByUserId(Long.parseLong(userId)));
+            writeResponse(resp, gson.toJson(postsDto));
         } else {
             getAllPosts(resp);
         }

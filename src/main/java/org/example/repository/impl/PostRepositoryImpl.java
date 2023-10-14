@@ -1,7 +1,6 @@
 package org.example.repository.impl;
 
 import org.example.db.ConnectionManager;
-import org.example.db.MySQLConnection;
 import org.example.model.PostEntity;
 import org.example.model.TagEntity;
 import org.example.repository.PostRepository;
@@ -14,46 +13,66 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class PostRepositoryImpl implements PostRepository {
 
     private final PostResultSetMapper postResultSetMapper = new PostResultSetMapperImpl();
     private final TagResultSetMapper tagResultSetMapper = new TagResultSetMapperImpl();
-    private final ConnectionManager dataSource = new MySQLConnection();
+    private final ConnectionManager connectionManager;
+
+    public PostRepositoryImpl(ConnectionManager connectionManager) {
+        this.connectionManager = connectionManager;
+    }
 
     @Override
-    public PostEntity findById(long id) {
-        String query = "SELECT * FROM posts WHERE id = ?";
-        try (Connection connection = dataSource.getConnection();
+    public List<PostEntity> findPostsByUserId(long userId) {
+        String query = "SELECT * FROM posts WHERE user_id = ?";
+        try (Connection connection = connectionManager.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setObject(1, id);
+            preparedStatement.setLong(1, userId);
             ResultSet resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
+
+            List<PostEntity> posts = new ArrayList<>();
+            while (resultSet.next()) {
                 PostEntity post = postResultSetMapper.map(resultSet);
-                String tagQuery = "SELECT t.name FROM tags t " +
-                        "JOIN post_tag pt ON t.id = pt.tag_id " +
-                        "WHERE pt.post_id = ?";
-                try (PreparedStatement tagStatement = connection.prepareStatement(tagQuery)) {
-                    tagStatement.setLong(1, id);
-                    ResultSet tagResultSet = tagStatement.executeQuery();
-                    List<TagEntity> tags = tagResultSetMapper.toListTags(tagResultSet);
-                    post.setTags(tags);
-                }
-                return post;
-            } else {
-                return null;
+                post.setTags(findTagsForPost(connection, post.getId())); // Call a helper method to find tags
+                posts.add(post);
             }
+
+            return posts;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
     }
+
+    // Helper method to find tags for a post
+    private List<TagEntity> findTagsForPost(Connection connection, long postId) {
+        String tagQuery = "SELECT t.name FROM tags t " +
+                "JOIN post_tag pt ON t.id = pt.tag_id " +
+                "WHERE pt.post_id = ?";
+        try (PreparedStatement tagStatement = connection.prepareStatement(tagQuery)) {
+            tagStatement.setLong(1, postId);
+            ResultSet tagResultSet = tagStatement.executeQuery();
+
+            List<TagEntity> tags = new ArrayList<>();
+            while (tagResultSet.next()) {
+                TagEntity tag = tagResultSetMapper.map(tagResultSet);
+                tags.add(tag);
+            }
+
+            return tags;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
     @Override
     public List<PostEntity> findAll() {
         String query = "SELECT id, content, title FROM posts";
-        try (Connection connection = dataSource.getConnection();
+        try (Connection connection = connectionManager.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             ResultSet resultSet = preparedStatement.executeQuery();
             return postResultSetMapper.toListPosts(resultSet);
@@ -65,7 +84,7 @@ public class PostRepositoryImpl implements PostRepository {
     @Override
     public void save(PostEntity post) {
         String query = "INSERT INTO posts (content, title) VALUES (?, ?)";
-        try (Connection connection = dataSource.getConnection();
+        try (Connection connection = connectionManager.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, post.getContent());
             preparedStatement.setString(2, post.getTitle());
@@ -78,7 +97,7 @@ public class PostRepositoryImpl implements PostRepository {
     @Override
     public void update(PostEntity post) {
         String query = "UPDATE posts SET content = ?, title = ?, user_id = ? WHERE id = ?";
-        try (Connection connection = dataSource.getConnection();
+        try (Connection connection = connectionManager.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, post.getContent());
             preparedStatement.setString(2, post.getTitle());
@@ -94,7 +113,7 @@ public class PostRepositoryImpl implements PostRepository {
     @Override
     public List<PostEntity> findPostsByTag(TagEntity tagEntity) {
         String query = "SELECT post_id FROM Post_Tag WHERE tag_id = ?";
-        try (Connection connection = dataSource.getConnection();
+        try (Connection connection = connectionManager.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setObject(1, tagEntity.getId());
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -108,7 +127,7 @@ public class PostRepositoryImpl implements PostRepository {
     @Override
     public void delete(long id) {
         String query = "DELETE FROM posts WHERE id = ?";
-        try (Connection connection = dataSource.getConnection();
+        try (Connection connection = connectionManager.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setObject(1, id);
             preparedStatement.executeUpdate();
