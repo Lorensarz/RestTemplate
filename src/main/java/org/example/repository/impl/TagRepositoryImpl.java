@@ -25,8 +25,8 @@ public class TagRepositoryImpl implements TagRepository{
 
     @Override
     public List<TagEntity> findTagsByPostId(PostEntity postEntity) {
-        String query = "SELECT t.id, t.name FROM tags t " +
-                "INNER JOIN post_tag pt ON t.id = pt.tag_id " +
+        String query = "SELECT t.tag_id, t.tag_name FROM tags t " +
+                "INNER JOIN post_tag pt ON t.tag_id = pt.tag_id " +
                 "WHERE pt.post_id = ?";
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {

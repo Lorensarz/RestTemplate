@@ -7,7 +7,6 @@ import org.example.repository.UserRepository;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.testcontainers.containers.MySQLContainer;
 import org.testcontainers.junit.jupiter.Container;
@@ -70,7 +69,6 @@ public class UserRepositoryImplTest {
         containerConnection.close();
     }
 
-
     @Test
     void testFindById() throws SQLException {
         // Arrange
@@ -130,18 +128,15 @@ public class UserRepositoryImplTest {
 
     @Test
     void testUpdate() throws SQLException {
-        // Arrange
         UserEntity updatedUser = new UserEntity();
         updatedUser.setName("Updated User");
         updatedUser.setEmail("updateduser@example.com");
         updatedUser.setId(1L);
 
-        // Act
         userRepository.update(updatedUser);
 
         setUp();
 
-        // Assert
         UserEntity expectedEntity = userRepository.findById(1L);
         assertEquals(expectedEntity, updatedUser);
         System.out.println(expectedEntity + " - " + updatedUser);
@@ -150,7 +145,7 @@ public class UserRepositoryImplTest {
 
     @Test
     void testDelete() {
-        long userId = 1;
+        long userId = 2L;
         boolean expectedDelete = userRepository.deleteById(userId);
         assertTrue(expectedDelete);
     }

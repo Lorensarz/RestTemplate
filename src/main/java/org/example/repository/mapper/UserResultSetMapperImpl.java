@@ -9,8 +9,8 @@ public class UserResultSetMapperImpl implements UserResultSetMapper {
     @Override
     public UserEntity map(ResultSet resultSet) throws SQLException {
         UserEntity user = new UserEntity();
-        user.setId(resultSet.getLong("id"));
-        user.setName(resultSet.getString("name"));
+        user.setId(resultSet.getLong("user_id"));
+        user.setName(resultSet.getString("user_name"));
         user.setEmail(resultSet.getString("email"));
         return user;
     }

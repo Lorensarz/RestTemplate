@@ -1,6 +1,7 @@
 package org.example.model;
 
 import java.util.List;
+import java.util.Objects;
 
 public class PostEntity {
 
@@ -59,5 +60,31 @@ public class PostEntity {
 
     public void setTags(List<TagEntity> tags) {
         this.tags = tags;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PostEntity that = (PostEntity) o;
+        return id == that.id && userId == that.userId && Objects.equals(title, that.title) &&
+                Objects.equals(content, that.content) &&
+                Objects.equals(tags, that.tags);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, title, content, userId, tags);
+    }
+
+    @Override
+    public String toString() {
+        return "PostEntity{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", content='" + content + '\'' +
+                ", userId=" + userId +
+                ", tags=" + tags +
+                '}';
     }
 }

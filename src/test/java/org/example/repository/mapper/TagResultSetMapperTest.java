@@ -29,23 +29,26 @@ class TagResultSetMapperTest {
         tagResultSetMapper = new TagResultSetMapperImpl();
     }
 
+//    @Test
+//    void testMap() throws SQLException {
+//        when(resultSet.getString("tag_name")).thenReturn("Tag Name");
+//
+//        TagEntity tag = tagResultSetMapper.map(resultSet);
+//
+//        assertEquals("Tag Name", tag.getName());
+//    }
+
     @Test
     void testMap() throws SQLException {
-        when(resultSet.getString("name")).thenReturn("Tag Name");
-
-        TagEntity tag = tagResultSetMapper.map(resultSet);
-
-        assertEquals("Tag Name", tag.getName());
-    }
-
-    @Test
-    void testToListTags() throws SQLException {
         when(resultSet.next()).thenReturn(true, true, false);
-        when(resultSet.getString("name")).thenReturn("Tag 1", "Tag 2");
+        when(resultSet.getLong("tag_id")).thenReturn(1L, 2L);
+        when(resultSet.getString("tag_name")).thenReturn("Tag 1", "Tag 2");
 
-        List<TagEntity> tags = tagResultSetMapper.toListTags(resultSet);
+        List<TagEntity> tags = tagResultSetMapper.map(resultSet);
 
         assertEquals(2, tags.size());
+        assertEquals(1L, tags.get(0).getId());
+        assertEquals(2L, tags.get(1).getId());
         assertEquals("Tag 1", tags.get(0).getName());
         assertEquals("Tag 2", tags.get(1).getName());
     }

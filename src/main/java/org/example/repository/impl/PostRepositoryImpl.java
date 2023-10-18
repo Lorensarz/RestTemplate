@@ -18,8 +18,8 @@ import java.util.List;
 
 public class PostRepositoryImpl implements PostRepository {
 
-    private final PostResultSetMapper postResultSetMapper = new PostResultSetMapperImpl();
     private final TagResultSetMapper tagResultSetMapper = new TagResultSetMapperImpl();
+    private final PostResultSetMapper postResultSetMapper = new PostResultSetMapperImpl();
     private final ConnectionManager connectionManager;
 
     public PostRepositoryImpl(ConnectionManager connectionManager) {
@@ -37,7 +37,7 @@ public class PostRepositoryImpl implements PostRepository {
             List<PostEntity> posts = new ArrayList<>();
             while (resultSet.next()) {
                 PostEntity post = postResultSetMapper.map(resultSet);
-                post.setTags(findTagsForPost(connection, post.getId())); // Call a helper method to find tags
+                post.setTags(findTagsForPost(connection, post.getId()));
                 posts.add(post);
             }
 
@@ -49,20 +49,16 @@ public class PostRepositoryImpl implements PostRepository {
 
     // Helper method to find tags for a post
     private List<TagEntity> findTagsForPost(Connection connection, long postId) {
-        String tagQuery = "SELECT t.name FROM tags t " +
-                "JOIN post_tag pt ON t.id = pt.tag_id " +
-                "WHERE pt.post_id = ?";
+        String tagQuery = """
+                SELECT t.tag_id, t.tag_name FROM tags t
+                JOIN post_tag pt ON t.tag_id = pt.tag_id
+                WHERE pt.post_id = ?
+                """;
         try (PreparedStatement tagStatement = connection.prepareStatement(tagQuery)) {
             tagStatement.setLong(1, postId);
             ResultSet tagResultSet = tagStatement.executeQuery();
 
-            List<TagEntity> tags = new ArrayList<>();
-            while (tagResultSet.next()) {
-                TagEntity tag = tagResultSetMapper.map(tagResultSet);
-                tags.add(tag);
-            }
-
-            return tags;
+            return tagResultSetMapper.map(tagResultSet);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -71,7 +67,12 @@ public class PostRepositoryImpl implements PostRepository {
 
     @Override
     public List<PostEntity> findAll() {
-        String query = "SELECT id, content, title FROM posts";
+        String query = """
+                SELECT p.post_id, p.content, p.title, p.user_id, t.tag_id, t.tag_name
+                FROM posts p
+                LEFT JOIN post_tag pt ON p.post_id = pt.post_id
+                LEFT JOIN tags t ON pt.tag_id = t.tag_id;
+                """;
         try (Connection connection = connectionManager.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -96,7 +97,7 @@ public class PostRepositoryImpl implements PostRepository {
 
     @Override
     public void update(PostEntity post) {
-        String query = "UPDATE posts SET content = ?, title = ?, user_id = ? WHERE id = ?";
+        String query = "UPDATE posts SET content = ?, title = ?, user_id = ? WHERE user_id = ?";
         try (Connection connection = connectionManager.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, post.getContent());
@@ -126,7 +127,7 @@ public class PostRepositoryImpl implements PostRepository {
 
     @Override
     public void delete(long id) {
-        String query = "DELETE FROM posts WHERE id = ?";
+        String query = "DELETE FROM posts WHERE post_id = ?";
         try (Connection connection = connectionManager.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setObject(1, id);

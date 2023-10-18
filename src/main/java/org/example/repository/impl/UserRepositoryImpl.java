@@ -27,7 +27,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public UserEntity findById(long id) {
-        String query = "SELECT * FROM users WHERE id = ?";
+        String query = "SELECT * FROM users WHERE user_id = ?";
         try (Connection connection = connectionManager.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setObject(1, id);
@@ -43,7 +43,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public boolean deleteById(long userId) {
-        String deleteUserQuery = "DELETE FROM users WHERE id = ?";
+        String deleteUserQuery = "DELETE FROM users WHERE user_id = ?";
         try (Connection connection = connectionManager.getConnection();
              PreparedStatement deleteUserStatement = connection.prepareStatement(deleteUserQuery)) {
             deleteUserStatement.setLong(1, userId);
@@ -73,7 +73,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public boolean save(UserEntity user) {
-        String query = "INSERT INTO users (name, email) VALUES (?, ?)";
+        String query = "INSERT INTO users (user_name, email) VALUES (?, ?)";
         try (Connection connection = connectionManager.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, user.getName());
@@ -87,7 +87,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public void update(UserEntity user) {
-        String query = "UPDATE users SET name = ?, email = ? WHERE id = ?";
+        String query = "UPDATE users SET user_name = ?, email = ? WHERE user_id = ?";
         try (Connection connection = connectionManager.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, user.getName());

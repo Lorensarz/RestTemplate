@@ -26,8 +26,8 @@ public class UserResultSetMapperTest {
 
     @Test
     void testMap() throws SQLException {
-        when(resultSet.getLong("id")).thenReturn(1L);
-        when(resultSet.getString("name")).thenReturn("John");
+        when(resultSet.getLong("user_id")).thenReturn(1L);
+        when(resultSet.getString("user_name")).thenReturn("John");
         when(resultSet.getString("email")).thenReturn("john@example.com");
 
         UserEntity user = userResultSetMapper.map(resultSet);

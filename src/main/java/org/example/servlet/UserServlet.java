@@ -45,7 +45,6 @@ public class UserServlet extends HttpServlet {
         writeResponse(resp, gson.toJson(userService.findAll()));
     }
 
-
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         UserDto userDto = gson.fromJson(req.getReader(), UserDto.class);

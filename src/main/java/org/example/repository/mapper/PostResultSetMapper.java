@@ -9,6 +9,6 @@ import java.util.List;
 
 public interface PostResultSetMapper {
     PostEntity map(ResultSet resultSet) throws SQLException;
-    List<PostEntity> toListPosts(ResultSet resultSet);
+    List<PostEntity> toListPosts(ResultSet resultSet) throws SQLException;
 
 }
