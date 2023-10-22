@@ -2,7 +2,6 @@ package org.example.repository.impl;
 
 import org.example.db.ConnectionManager;
 import org.example.model.UserEntity;
-import org.example.repository.PostRepository;
 import org.example.repository.UserRepository;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,7 +28,6 @@ public class UserRepositoryImplTest {
     private ConnectionManager connectionManager;
 
     private UserRepository userRepository;
-    private PostRepository postRepository;
 
     @Container
     public static MySQLContainer<?> mysqlContainer = new MySQLContainer<>("mysql:latest")
@@ -70,25 +68,21 @@ public class UserRepositoryImplTest {
     }
 
     @Test
-    void testFindById() throws SQLException {
-        // Arrange
+    void testFindById() {
         long userId = 1;
         UserEntity expectedUser = new UserEntity();
         expectedUser.setId(1L);
         expectedUser.setName("User 1");
         expectedUser.setEmail("user1@example.com");
 
-        // Act
         UserEntity user = userRepository.findById(userId);
 
-        // Assert
         assertNotNull(user);
         assertEquals(expectedUser, user);
     }
 
     @Test
-    void testFindAll() throws SQLException {
-        // Arrange
+    void testFindAll() {
         List<UserEntity> expectedUsers = new ArrayList<>();
 
         UserEntity expectedUser1 = new UserEntity();
@@ -104,25 +98,20 @@ public class UserRepositoryImplTest {
         expectedUsers.add(expectedUser1);
         expectedUsers.add(expectedUser2);
 
-        // Act
         List<UserEntity> users = userRepository.findAll();
 
-        // Assert
         Assertions.assertEquals(expectedUsers, users);
 
     }
 
     @Test
-    void testSave() throws SQLException {
-        // Arrange
+    void testSave() {
         UserEntity newUser = new UserEntity();
         newUser.setName("New User");
         newUser.setEmail("newuser3@example.com");
 
-        // Act
         boolean result = userRepository.save(newUser);
 
-        // Assert
         assertTrue(result);
     }
 

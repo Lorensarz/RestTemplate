@@ -13,7 +13,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
@@ -46,7 +45,7 @@ public class UserServletTest {
 
 
     @Test
-    public void testDoGet() throws ServletException, IOException {
+    public void testDoGet() throws IOException {
         UserDto userDto = new UserDto(1L, "Test User", "test@example.com");
         UserEntity userEntity = userDtoMapper.toEntity(userDto);
 
@@ -69,7 +68,7 @@ public class UserServletTest {
 
 
     @Test
-    public void testDoGetWithoutId() throws ServletException, IOException {
+    public void testDoGetWithoutId() throws IOException {
         List<UserDto> users = new ArrayList<>();
         users.add(new UserDto(3L, "new user", "new@site"));
         users.add(new UserDto(4L, "New User", "newuser@example.com"));
@@ -92,7 +91,7 @@ public class UserServletTest {
     }
 
     @Test
-    public void testDoPost() throws ServletException, IOException {
+    public void testDoPost() throws IOException {
         String json = "{\"id\": 6, \"name\": \"Jay\", \"email\": \"jay@example.com\"}";
         BufferedReader reader = new BufferedReader(new StringReader(json));
         when(request.getReader()).thenReturn(reader);

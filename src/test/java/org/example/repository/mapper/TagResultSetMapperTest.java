@@ -1,8 +1,6 @@
 package org.example.repository.mapper;
 
 import org.example.model.TagEntity;
-import org.example.repository.mapper.TagResultSetMapper;
-import org.example.repository.mapper.TagResultSetMapperImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -28,15 +26,6 @@ class TagResultSetMapperTest {
     void setUp() {
         tagResultSetMapper = new TagResultSetMapperImpl();
     }
-
-//    @Test
-//    void testMap() throws SQLException {
-//        when(resultSet.getString("tag_name")).thenReturn("Tag Name");
-//
-//        TagEntity tag = tagResultSetMapper.map(resultSet);
-//
-//        assertEquals("Tag Name", tag.getName());
-//    }
 
     @Test
     void testMap() throws SQLException {

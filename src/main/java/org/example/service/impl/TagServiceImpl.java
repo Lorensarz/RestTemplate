@@ -27,17 +27,22 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public void addTagToPost(PostDto post, TagDto tag) {
-        TagEntity tagEntity = tagDtoMapper.toEntity(tag);
+    public void addTagToPost(PostDto post) {
         PostEntity postEntity = postDtoMapper.toEntity(post);
-        repository.addTagToPost(postEntity, tagEntity);
+        repository.addTagToPost(postEntity);
+    }
+
+    @Override
+    public void updateTagForPost(PostDto post) {
+        PostEntity postEntity = postDtoMapper.toEntity(post);
+        repository.updateTagsForPost(postEntity);
     }
 
     @Override
     public void removeTagFromPost(PostDto post, TagDto tag) {
         TagEntity tagEntity = tagDtoMapper.toEntity(tag);
         PostEntity postEntity = postDtoMapper.toEntity(post);
-        repository.removeTagFromPost(postEntity, tagEntity);
+        repository.removeTagFromPost(postEntity);
     }
 
     @Override

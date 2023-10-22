@@ -56,7 +56,7 @@ public class UserDtoMapperImplTest {
         List<UserEntity> userEntities = new ArrayList<>();
         for (int i = 1; i <= 3; i++) {
             UserEntity userEntity = new UserEntity();
-            userEntity.setId((long) i);
+            userEntity.setId(i);
             userEntity.setName("Test User " + i);
             userEntity.setEmail("test" + i + "@example.com");
             userEntities.add(userEntity);

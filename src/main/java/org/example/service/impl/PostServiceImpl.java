@@ -9,6 +9,7 @@ import org.example.servlet.dto.TagDto;
 import org.example.servlet.mapper.PostDtoMapper;
 import org.example.servlet.mapper.TagDtoMapper;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public class PostServiceImpl implements PostService {

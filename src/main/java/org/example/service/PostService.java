@@ -4,6 +4,7 @@ import org.example.model.PostEntity;
 import org.example.servlet.dto.PostDto;
 import org.example.servlet.dto.TagDto;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public interface PostService {

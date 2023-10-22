@@ -33,7 +33,7 @@ public class PostDtoMapperImplTest {
         postEntity.setId(1L);
         postEntity.setTitle("Test Post");
         postEntity.setContent("This is a test post.");
-        postEntity.setUserId(101L);
+        postEntity.setUserId(1L);
         postEntity.setTags(tagsEntity);
 
         PostDto postDto = postDtoMapper.toDto(postEntity);
@@ -44,7 +44,6 @@ public class PostDtoMapperImplTest {
         assertEquals(postEntity.getContent(), postDto.getContent());
         assertEquals(postEntity.getUserId(), postDto.getUserId());
 
-        // Сравниваем списки тегов
         List<TagDto> tagsDto = postDto.getTags();
 
         assertEquals(tagsEntity.size(), tagsDto.size());
@@ -64,7 +63,8 @@ public class PostDtoMapperImplTest {
         postDto.setId(1L);
         postDto.setTitle("Test Post");
         postDto.setContent("This is a test post.");
-        postDto.setUserId(101L);
+        postDto.setUserId(1L);
+        postDto.setTags(List.of(new TagDto(1L, "Tag 1")));
 
         PostEntity postEntity = postDtoMapper.toEntity(postDto);
 
@@ -83,10 +83,10 @@ public class PostDtoMapperImplTest {
         tagsEntity.add(tagDtoMapper.toEntity(tagDto));
         for (int i = 1; i <= 3; i++) {
             PostEntity postEntity = new PostEntity();
-            postEntity.setId((long) i);
+            postEntity.setId(i);
             postEntity.setTitle("Test Post " + i);
             postEntity.setContent("This is a test post " + i + ".");
-            postEntity.setUserId((long) (100 + i));
+            postEntity.setUserId(i);
             postEntity.setTags(tagsEntity);
             postEntities.add(postEntity);
         }
@@ -117,10 +117,11 @@ public class PostDtoMapperImplTest {
         List<PostDto> postDtos = new ArrayList<>();
         for (int i = 1; i <= 3; i++) {
             PostDto postDto = new PostDto();
-            postDto.setId((long) i);
+            postDto.setId(i);
             postDto.setTitle("Test Post " + i);
             postDto.setContent("This is a test post " + i + ".");
-            postDto.setUserId((long) (100 + i));
+            postDto.setUserId((i));
+            postDto.setTags(List.of(new TagDto(i, "Tag " + i)));
             postDtos.add(postDto);
         }
 

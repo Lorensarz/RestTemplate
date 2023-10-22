@@ -1,6 +1,7 @@
 package org.example.servlet.mapper;
 
 import org.example.model.PostEntity;
+import org.example.model.TagEntity;
 import org.example.servlet.dto.PostDto;
 
 import java.util.ArrayList;
@@ -28,6 +29,7 @@ public class PostDtoMapperImpl implements PostDtoMapper {
         post.setTitle(dto.getTitle());
         post.setContent(dto.getContent());
         post.setUserId(dto.getUserId());
+        post.setTags(tagMapper.toEntityList(dto.getTags()));
         return post;
     }
 

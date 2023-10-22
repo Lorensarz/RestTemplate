@@ -4,6 +4,8 @@ import com.google.gson.Gson;
 import org.example.db.ConnectionManager;
 import org.example.db.MySQLConnection;
 import org.example.repository.impl.TagRepositoryImpl;
+import org.example.repository.mapper.TagResultSetMapper;
+import org.example.repository.mapper.TagResultSetMapperImpl;
 import org.example.service.TagService;
 import org.example.service.impl.TagServiceImpl;
 import org.example.servlet.dto.PostDto;
@@ -21,8 +23,8 @@ import java.util.List;
 
 @WebServlet("/tags")
 public class TagServlet extends HttpServlet {
-    private final ConnectionManager connectionManager = new MySQLConnection();
-    private final TagService tagService = new TagServiceImpl(
+    private ConnectionManager connectionManager = new MySQLConnection();
+    private TagService tagService = new TagServiceImpl(
             new TagRepositoryImpl(connectionManager),
             new TagDtoMapperImpl(),
             new PostDtoMapperImpl());
@@ -39,8 +41,13 @@ public class TagServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         PostDto postDto = gson.fromJson(req.getReader(), PostDto.class);
-        TagDto tagDto = gson.fromJson(req.getReader(), TagDto.class);
-        tagService.addTagToPost(postDto, tagDto);
+        tagService.addTagToPost(postDto);
+    }
+
+    @Override
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        PostDto postDto = gson.fromJson(req.getReader(), PostDto.class);
+        tagService.updateTagForPost(postDto);
     }
 
     @Override

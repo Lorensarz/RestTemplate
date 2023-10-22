@@ -41,4 +41,9 @@ public class MySQLConnection implements ConnectionManager {
     public Connection getConnection() throws SQLException {
         return dataSource.getConnection();
     }
+
+    @Override
+    public void close() {
+        dataSource.close();
+    }
 }

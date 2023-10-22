@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface TagResultSetMapper {
     List<TagEntity> map(ResultSet resultSet) throws SQLException;
-    List<TagEntity> toListTags(ResultSet resultSet) throws SQLException;
+//    List<TagEntity> toListTags(ResultSet resultSet) throws SQLException;
 }

@@ -7,7 +7,6 @@ import org.example.servlet.dto.PostDto;
 import org.example.servlet.dto.TagDto;
 import org.example.servlet.mapper.PostDtoMapper;
 import org.example.servlet.mapper.TagDtoMapper;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -16,9 +15,8 @@ import org.mockito.MockitoAnnotations;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 public class TagServiceImplTest {
 
@@ -40,18 +38,27 @@ public class TagServiceImplTest {
     @Test
     public void testAddTagToPost() {
         PostDto postDto = new PostDto();
-        TagDto tagDto = new TagDto();
         PostEntity postEntity = new PostEntity();
-        TagEntity tagEntity = new TagEntity();
 
-        when(tagDtoMapper.toEntity(tagDto)).thenReturn(tagEntity);
         when(postDtoMapper.toEntity(postDto)).thenReturn(postEntity);
 
-        tagService.addTagToPost(postDto, tagDto);
+        tagService.addTagToPost(postDto);
 
-        verify(tagDtoMapper).toEntity(tagDto);
         verify(postDtoMapper).toEntity(postDto);
-        verify(repository).addTagToPost(postEntity, tagEntity);
+        verify(repository).addTagToPost(postEntity);
+    }
+
+    @Test
+    void testUpdateTagForPost() {
+        PostDto postDto = new PostDto();
+        PostEntity postEntity = new PostEntity();
+
+        when(postDtoMapper.toEntity(postDto)).thenReturn(postEntity);
+
+        tagService.updateTagForPost(postDto);
+
+        verify(postDtoMapper).toEntity(postDto);
+        verify(repository).updateTagsForPost(postEntity);
     }
 
     @Test
@@ -68,7 +75,7 @@ public class TagServiceImplTest {
 
         verify(tagDtoMapper).toEntity(tagDto);
         verify(postDtoMapper).toEntity(postDto);
-        verify(repository).removeTagFromPost(postEntity, tagEntity);
+        verify(repository).removeTagFromPost(postEntity);
     }
 
     @Test
@@ -82,7 +89,7 @@ public class TagServiceImplTest {
         when(repository.findTagsByPostId(postEntity)).thenReturn(tagEntities);
         when(tagDtoMapper.toDtoList(tagEntities)).thenReturn(tagDtos);
 
-        List<TagDto> result = tagService.findTagsByPost(postDto);
+        tagService.findTagsByPost(postDto);
 
         verify(postDtoMapper).toEntity(postDto);
         verify(repository).findTagsByPostId(postEntity);

@@ -33,7 +33,7 @@ public class PostServiceImplTest {
 
     @BeforeEach
     public void setUp() {
-        MockitoAnnotations.initMocks(this);
+        MockitoAnnotations.openMocks(this);
         postService = new PostServiceImpl(repository, postDtoMapper, tagDtoMapper);
     }
 
@@ -72,11 +72,10 @@ public class PostServiceImplTest {
 
         when(repository.findAll()).thenReturn(postEntities);
 
-        List<PostEntity> result = postService.findAll();
+        postService.findAll();
 
         verify(repository).findAll();
 
-        // Добавьте здесь проверку результата, если это необходимо
     }
 
     @Test
@@ -126,7 +125,7 @@ public class PostServiceImplTest {
         when(repository.findPostsByTag(tagEntity)).thenReturn(postEntities);
         when(postDtoMapper.toDtoList(postEntities)).thenReturn(postDtos);
 
-        List<PostDto> result = postService.findPostsByTag(tagDto);
+        postService.findPostsByTag(tagDto);
 
         verify(tagDtoMapper).toEntity(tagDto);
         verify(repository).findPostsByTag(tagEntity);

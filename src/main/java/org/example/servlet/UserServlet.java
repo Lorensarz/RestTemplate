@@ -23,9 +23,9 @@ public class UserServlet extends HttpServlet {
 
     private final UserDtoMapper userDtoMapper;
     private final UserRepository userRepository;
-    ConnectionManager connectionManager = new MySQLConnection();
+    private ConnectionManager connectionManager = new MySQLConnection();
 
-    UserService userService = new  UserServiceImpl(
+    private UserService userService = new  UserServiceImpl(
             userDtoMapper = new UserDtoMapperImpl(),
             userRepository = new UserRepositoryImpl(connectionManager));
     private final Gson gson = new Gson();

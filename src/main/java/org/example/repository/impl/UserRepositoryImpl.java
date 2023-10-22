@@ -2,8 +2,6 @@ package org.example.repository.impl;
 
 import org.example.db.ConnectionManager;
 import org.example.model.UserEntity;
-import org.example.repository.PostRepository;
-import org.example.repository.TagRepository;
 import org.example.repository.UserRepository;
 import org.example.repository.mapper.UserResultSetMapper;
 import org.example.repository.mapper.UserResultSetMapperImpl;
@@ -18,8 +16,6 @@ import java.util.List;
 public class UserRepositoryImpl implements UserRepository {
     private final UserResultSetMapper resultSetMapper = new UserResultSetMapperImpl();
     private final ConnectionManager connectionManager;
-    private PostRepository postRepository;
-    private TagRepository tagRepository;
 
     public UserRepositoryImpl(ConnectionManager connectionManager) {
         this.connectionManager = connectionManager;

@@ -5,7 +5,6 @@ import org.example.servlet.dto.TagDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,7 +51,7 @@ public class TagDtoMapperImplTest {
         List<TagEntity> tagEntities = new ArrayList<>();
         for (int i = 1; i <= 3; i++) {
             TagEntity tagEntity = new TagEntity();
-            tagEntity.setId((long) i);
+            tagEntity.setId(i);
             tagEntity.setName("Test Tag " + i);
             tagEntities.add(tagEntity);
         }
@@ -73,7 +72,7 @@ public class TagDtoMapperImplTest {
         List<TagDto> tagDtos = new ArrayList<>();
         for (int i = 1; i <= 3; i++) {
             TagDto tagDto = new TagDto();
-            tagDto.setId((long) i);
+            tagDto.setId(i);
             tagDto.setName("Test Tag " + i);
             tagDtos.add(tagDto);
         }

@@ -20,9 +20,6 @@ public class PostResultSetMapperImpl implements PostResultSetMapper {
         post.setTitle(resultSet.getString("title"));
         post.setUserId(resultSet.getLong("user_id"));
 
-        List<TagEntity> tags = tagResultSetMapper.map(resultSet);
-        post.setTags(tags);
-
         return post;
     }
 

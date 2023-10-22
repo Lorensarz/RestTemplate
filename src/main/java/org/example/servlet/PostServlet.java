@@ -29,7 +29,7 @@ public class PostServlet extends HttpServlet {
     private final TagDtoMapper tagDtoMapper;
     private ConnectionManager connectionManager = new MySQLConnection();
 
-    private final PostService postService = new PostServiceImpl(
+    private PostService postService = new PostServiceImpl(
             postRepository = new PostRepositoryImpl(connectionManager),
             postDtoMapper = new PostDtoMapperImpl(),
             tagDtoMapper = new TagDtoMapperImpl());
@@ -40,6 +40,7 @@ public class PostServlet extends HttpServlet {
         String userId = req.getParameter("user_id");
         if (userId != null) {
             List<PostDto> postsDto = postDtoMapper.toDtoList(postService.findPostsByUserId(Long.parseLong(userId)));
+
             writeResponse(resp, gson.toJson(postsDto));
         } else {
             getAllPosts(resp);

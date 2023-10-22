@@ -10,7 +10,7 @@ import java.util.List;
 public class TagResultSetMapperImpl implements TagResultSetMapper {
 
     @Override
-    public List<TagEntity> map(ResultSet resultSet) throws SQLException{
+    public List<TagEntity> map(ResultSet resultSet) throws SQLException {
         List<TagEntity> tags = new ArrayList<>();
         while (resultSet.next()) {
             TagEntity tag = new TagEntity();
@@ -19,15 +19,5 @@ public class TagResultSetMapperImpl implements TagResultSetMapper {
             tags.add(tag);
         }
         return tags;
-    }
-
-    public List<TagEntity> toListTags(ResultSet resultSet) throws SQLException {
-//        List<TagEntity> tags = new ArrayList<>();
-//            while (resultSet.next()) {
-//                TagEntity tag = map(resultSet);
-//                tags.add(tag);
-//            }
-//            return tags;
-        return null;
     }
 }
