@@ -18,10 +18,6 @@ public class UserServiceImpl implements UserService {
         this.repository = repository;
     }
 
-    private UserEntity getUserEntity(UserDto userDto) {
-        return userDtoMapper.toEntity(userDto);
-    }
-
     @Override
     public UserEntity findById(long id) {
         return repository.findById(id);
