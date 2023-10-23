@@ -64,16 +64,12 @@ public class TagServiceImplTest {
     @Test
     public void testRemoveTagFromPost() {
         PostDto postDto = new PostDto();
-        TagDto tagDto = new TagDto();
         PostEntity postEntity = new PostEntity();
-        TagEntity tagEntity = new TagEntity();
 
-        when(tagDtoMapper.toEntity(tagDto)).thenReturn(tagEntity);
         when(postDtoMapper.toEntity(postDto)).thenReturn(postEntity);
 
-        tagService.removeTagFromPost(postDto, tagDto);
+        tagService.removeTagFromPost(postDto);
 
-        verify(tagDtoMapper).toEntity(tagDto);
         verify(postDtoMapper).toEntity(postDto);
         verify(repository).removeTagFromPost(postEntity);
     }

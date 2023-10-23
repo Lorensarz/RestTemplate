@@ -53,8 +53,7 @@ public class TagServlet extends HttpServlet {
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         PostDto postDto = gson.fromJson(req.getReader(), PostDto.class);
-        TagDto tagDto = gson.fromJson(req.getReader(), TagDto.class);
-        tagService.removeTagFromPost(postDto, tagDto);
+        tagService.removeTagFromPost(postDto);
     }
 
     private void writeResponse(HttpServletResponse resp, String jsonString) throws IOException {

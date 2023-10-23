@@ -39,8 +39,7 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public void removeTagFromPost(PostDto post, TagDto tag) {
-        TagEntity tagEntity = tagDtoMapper.toEntity(tag);
+    public void removeTagFromPost(PostDto post) {
         PostEntity postEntity = postDtoMapper.toEntity(post);
         repository.removeTagFromPost(postEntity);
     }

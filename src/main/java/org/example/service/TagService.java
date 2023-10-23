@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface TagService {
     void addTagToPost(PostDto post);
-    void removeTagFromPost(PostDto post, TagDto tag);
+    void removeTagFromPost(PostDto post);
     List<TagDto> findTagsByPost(PostDto postDto);
     void updateTagForPost(PostDto postDto);
 }
